@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="sk">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Zvoz odpadu - Geča</title>
+  <link rel="manifest" href="manifest.webmanifest">
+  <meta name="theme-color" content="#2e7d32">
+  <link rel="icon" type="image/png" href="icon-192.png">
+  <style>
+    :root {
+      --bg-color: #f4f6f8;
+      --card-bg: #ffffff;
+      --text-main: #212121;
+      --text-sub: #666666;
+      --primary: #2e7d32;
+      --primary-dark: #1b5e20;
+    }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background-color: var(--bg-color);
+      color: var(--text-main);
+      margin: 0;
+      padding: 16px;
+    }
+    .container {
+      max-width: 480px;
+      margin: 0 auto;
+      background: var(--card-bg);
+      padding: 20px;
+      border-radius: 16px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+    }
+    header {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    h1 {
+      font-size: 1.5rem;
+      margin: 0 0 4px 0;
+      color: var(--primary-dark);
+    }
+    p.subtitle {
+      margin: 0;
+      color: var(--text-sub);
+      font-size: 0.9rem;
+    }
+    .action-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      width: 100%;
+      background-color: var(--primary);
+      color: white;
+      border: none;
+      padding: 14px;
+      border-radius: 10px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      margin-bottom: 20px;
+      box-shadow: 0 2px 8px rgba(46, 125, 50, 0.3);
+    }
+    .action-btn:active {
+      background-color: var(--primary-dark);
+    }
+    .card-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .card {
+      background: #fafafa;
+      border-left: 6px solid #ccc;
+      padding: 12px 16px;
+      border-radius: 8px;
+    }
+    .card.ko { border-left-color: #333333; }      /* Komunálny odpad */
+    .card.plasty { border-left-color: #fbc02d; }  /* Plasty, Kovy, VKM */
+    .card.papier { border-left-color: #1976d2; }  /* Papier */
+    .card.sklo { border-left-color: #388e3c; }    /* Sklo */
+    .card.bio { border-left-color: #795548; }     /* Bioodpad / BRKO */
+
+    .card-type {
+      font-weight: bold;
+      font-size: 1.05rem;
+      margin-bottom: 4px;
+    }
+    .card-date {
+      font-size: 0.9rem;
+      color: var(--text-sub);
+      text-transform: capitalize;
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <header>
+    <h1>🗑️ Zvoz odpadu Geča</h1>
+    <p class="subtitle">Harmonogram vývozov KOSIT</p>
+  </header>
+
+  <button class="action-btn" onclick="exportToICS()">
+    📅 Pridať do iOS / Google Kalendára
+  </button>
+
+  <div class="card-list" id="schedule">
+    <!-- Dátumy sa načítajú zo skriptu -->
+  </div>
+</div>
+
+<script>
+  // DÁTOVÝ HARMONOGRAM PRE GEČU
+  // Sem dopĺňate alebo upravujete dátumy zvozu KOSIT-u (Formát YYYY-MM-DD)
+  const harmonogramGeca = [
+    { type: "Komunálny odpad", date: "2026-11-05", class: "ko" },
+    { type: "Plasty, Kovy & VKM", date: "2026-11-12", class: "plasty" },
+    { type: "Komunálny odpad", date: "2026-11-19", class: "ko" },
+    { type: "Papier", date: "2026-11-25", class: "papier" },
+    { type: "Sklo", date: "2026-12-02", class: "sklo" }
+  ];
+
+  // Vykreslenie kartičiek
+  const scheduleContainer = document.getElementById('schedule');
+  harmonogramGeca.forEach(item => {
+    const d = new Date(item.date);
+    const options = { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' };
+    const dateFormatted = d.toLocaleDateString('sk-SK', options);
+
+    const card = document.createElement('div');
+    card.className = `card ${item.class}`;
+    card.innerHTML = `
+      <div class="card-type">${item.type}</div>
+      <div class="card-date">${dateFormatted}</div>
+    `;
+    scheduleContainer.appendChild(card);
+  });
+
+  // Generovanie a stiahnutie .ICS kalendára pre iPhone (iOS)
+  function exportToICS() {
+    let icsData = [
+      "BEGIN:VCALENDAR",
+      "VERSION:2.0",
+      "PRODID:-//Zvoz Odpadu Geca//SK",
+      "CALSCALE:GREGORIAN",
+      "METHOD:PUBLISH"
+    ];
+
+    harmonogramGeca.forEach((item, idx) => {
+      const cleanDate = item.date.replace(/-/g, "");
+      icsData.push(
+        "BEGIN:VEVENT",
+        `UID:geca-zvoz-${cleanDate}-${idx}@geca.sk`,
+        `DTSTART;VALUE=DATE:${cleanDate}`,
+        `SUMMARY:🗑️ Odvoz: ${item.type}`,
+        `DESCRIPTION:Zvoz odpadu v obci Geča - ${item.type}. Nezabudnite vyložiť nádobu/vrece!`,
+        "LOCATION:Geča",
+        "BEGIN:VALARM",
+        "ACTION:DISPLAY",
+        "DESCRIPTION:Pripomienka odvozu odpadu",
+        "TRIGGER:-PT12H", // Pripomienka 12 hodín pred vývozom (večer vopred)
+        "END:VALARM",
+        "END:VEVENT"
+      );
+    });
+
+    icsData.push("END:VCALENDAR");
+
+    const blob = new Blob([icsData.join("\r\n")], { type: "text/calendar;charset=utf-8" });
+    const link = document.createElement("a");
+    link.href = window.URL.createObjectURL(blob);
+    link.setAttribute("download", "Zvoz_Odpadu_Geca.ics");
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  }
+
+  // Registrácia Service Workera pre PWA
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('./sw.js').catch(() => {});
+  }
+</script>
+
+</body>
+</html>
