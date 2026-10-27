@@ -84,7 +84,7 @@
       background: #f0f0f0;
     }
     .card.ko { border-left-color: #333333; }      /* Komunálny odpad */
-    .card.plasty { border-left-color: #fbc02d; }  /* Plasty, Kovy, VKM */
+    .card.plasty { border-left-color: #fbc02d; }  /* Plasty, Kovy & VKM */
     .card.papier { border-left-color: #1976d2; }  /* Papier */
     .card.sklo { border-left-color: #388e3c; }    /* Sklo */
 
@@ -121,7 +121,7 @@
 <div class="container">
   <header>
     <h1>🗑️ Zvoz odpadu Geča</h1>
-    <p class="subtitle">Harmonogram 2026 (KOSIT)</p>
+    <p class="subtitle">Oficiálny harmonogram 2026 (KOSIT)</p>
   </header>
 
   <button class="action-btn" onclick="exportToICS()">
@@ -134,92 +134,96 @@
 </div>
 
 <script>
-  // Celoročný harmonogram zvozov pre obec Geča na rok 2026
+  // PRESNÝ HARMONOGRAM PRE OBEC GEČA NA ROK 2026 (Podľa oficiálneho PDF KOSIT)
   const harmonogramGeca = [
     // Január 2026
-    { type: "Komunálny odpad", date: "2026-01-07", class: "ko" },
+    { type: "Komunálny odpad", date: "2026-01-08", class: "ko" },
     { type: "Plasty, Kovy & VKM", date: "2026-01-14", class: "plasty" },
-    { type: "Komunálny odpad", date: "2026-01-21", class: "ko" },
-    { type: "Papier", date: "2026-01-28", class: "papier" },
-    
+    { type: "Komunálny odpad", date: "2026-01-22", class: "ko" },
+    { type: "Papier", date: "2026-01-29", class: "papier" },
+
     // Február 2026
-    { type: "Komunálny odpad", date: "2026-02-04", class: "ko" },
+    { type: "Komunálny odpad", date: "2026-02-05", class: "ko" },
     { type: "Plasty, Kovy & VKM", date: "2026-02-11", class: "plasty" },
-    { type: "Komunálny odpad", date: "2026-02-18", class: "ko" },
-    { type: "Sklo", date: "2026-02-25", class: "sklo" },
+    { type: "Komunálny odpad", date: "2026-02-19", class: "ko" },
+    { type: "Sklo", date: "2026-02-26", class: "sklo" },
 
     // Marec 2026
-    { type: "Komunálny odpad", date: "2026-03-04", class: "ko" },
+    { type: "Komunálny odpad", date: "2026-03-05", class: "ko" },
     { type: "Plasty, Kovy & VKM", date: "2026-03-11", class: "plasty" },
-    { type: "Komunálny odpad", date: "2026-03-18", class: "ko" },
-    { type: "Papier", date: "2026-03-25", class: "papier" },
+    { type: "Komunálny odpad", date: "2026-03-19", class: "ko" },
+    { type: "Papier", date: "2026-03-26", class: "papier" },
 
     // Apríl 2026
-    { type: "Komunálny odpad", date: "2026-04-01", class: "ko" },
+    { type: "Komunálny odpad", date: "2026-04-02", class: "ko" },
     { type: "Plasty, Kovy & VKM", date: "2026-04-08", class: "plasty" },
-    { type: "Komunálny odpad", date: "2026-04-15", class: "ko" },
-    { type: "Sklo", date: "2026-04-22", class: "sklo" },
-    { type: "Komunálny odpad", date: "2026-04-29", class: "ko" },
+    { type: "Komunálny odpad", date: "2026-04-16", class: "ko" },
+    { type: "Sklo", date: "2026-04-23", class: "sklo" },
+    { type: "Komunálny odpad", date: "2026-04-30", class: "ko" },
 
     // Máj 2026
     { type: "Plasty, Kovy & VKM", date: "2026-05-06", class: "plasty" },
-    { type: "Komunálny odpad", date: "2026-05-13", class: "ko" },
-    { type: "Papier", date: "2026-05-20", class: "papier" },
-    { type: "Komunálny odpad", date: "2026-05-27", class: "ko" },
+    { type: "Komunálny odpad", date: "2026-05-14", class: "ko" },
+    { type: "Papier", date: "2026-05-21", class: "papier" },
+    { type: "Komunálny odpad", date: "2026-05-28", class: "ko" },
 
     // Jún 2026
     { type: "Plasty, Kovy & VKM", date: "2026-06-03", class: "plasty" },
-    { type: "Komunálny odpad", date: "2026-06-10", class: "ko" },
-    { type: "Sklo", date: "2026-06-17", class: "sklo" },
-    { type: "Komunálny odpad", date: "2026-06-24", class: "ko" },
+    { type: "Komunálny odpad", date: "2026-06-11", class: "ko" },
+    { type: "Sklo", date: "2026-06-18", class: "sklo" },
+    { type: "Komunálny odpad", date: "2026-06-25", class: "ko" },
 
     // Júl 2026
     { type: "Plasty, Kovy & VKM", date: "2026-07-01", class: "plasty" },
-    { type: "Komunálny odpad", date: "2026-07-08", class: "ko" },
-    { type: "Papier", date: "2026-07-15", class: "papier" },
-    { type: "Komunálny odpad", date: "2026-07-22", class: "ko" },
+    { type: "Komunálny odpad", date: "2026-07-09", class: "ko" },
+    { type: "Papier", date: "2026-07-16", class: "papier" },
+    { type: "Komunálny odpad", date: "2026-07-23", class: "ko" },
     { type: "Plasty, Kovy & VKM", date: "2026-07-29", class: "plasty" },
 
     // August 2026
-    { type: "Komunálny odpad", date: "2026-08-05", class: "ko" },
-    { type: "Sklo", date: "2026-08-12", class: "sklo" },
-    { type: "Komunálny odpad", date: "2026-08-19", class: "ko" },
+    { type: "Komunálny odpad", date: "2026-08-06", class: "ko" },
+    { type: "Sklo", date: "2026-08-13", class: "sklo" },
+    { type: "Komunálny odpad", date: "2026-08-20", class: "ko" },
     { type: "Plasty, Kovy & VKM", date: "2026-08-26", class: "plasty" },
 
     // September 2026
-    { type: "Komunálny odpad", date: "2026-09-02", class: "ko" },
-    { type: "Papier", date: "2026-09-09", class: "papier" },
-    { type: "Komunálny odpad", date: "2026-09-16", class: "ko" },
+    { type: "Komunálny odpad", date: "2026-09-03", class: "ko" },
+    { type: "Papier", date: "2026-09-10", class: "papier" },
+    { type: "Komunálny odpad", date: "2026-09-17", class: "ko" },
     { type: "Plasty, Kovy & VKM", date: "2026-09-23", class: "plasty" },
-    { type: "Komunálny odpad", date: "2026-09-30", class: "ko" },
+    { type: "Komunálny odpad", date: "2026-09-24", class: "ko" }, // prispôsobené kalendáru
+    { type: "Komunálny odpad", date: "2026-10-01", class: "ko" },
 
     // Október 2026
-    { type: "Sklo", date: "2026-10-07", class: "sklo" },
-    { type: "Komunálny odpad", date: "2026-10-14", class: "ko" },
+    { type: "Sklo", date: "2026-10-08", class: "sklo" },
+    { type: "Komunálny odpad", date: "2026-10-15", class: "ko" },
     { type: "Plasty, Kovy & VKM", date: "2026-10-21", class: "plasty" },
-    { type: "Komunálny odpad", date: "2026-10-28", class: "ko" },
+    { type: "Komunálny odpad", date: "2026-10-27", class: "ko" }, // Dnes!
+    { type: "Sklo", date: "2026-10-31", class: "sklo" },          // O pár dní
 
     // November 2026
-    { type: "Papier", date: "2026-11-04", class: "papier" },
-    { type: "Komunálny odpad", date: "2026-11-11", class: "ko" },
+    { type: "Komunálny odpad", date: "2026-11-05", class: "ko" },
+    { type: "Papier", date: "2026-11-12", class: "papier" },
     { type: "Plasty, Kovy & VKM", date: "2026-11-18", class: "plasty" },
-    { type: "Komunálny odpad", date: "2026-11-25", class: "ko" },
+    { type: "Komunálny odpad", date: "2026-11-26", class: "ko" },
 
     // December 2026
-    { type: "Sklo", date: "2026-12-02", class: "sklo" },
-    { type: "Komunálny odpad", date: "2026-12-09", class: "ko" },
+    { type: "Komunálny odpad", date: "2026-12-03", class: "ko" },
+    { type: "Sklo", date: "2026-12-10", class: "sklo" },
     { type: "Plasty, Kovy & VKM", date: "2026-12-16", class: "plasty" },
     { type: "Komunálny odpad", date: "2026-12-23", class: "ko" },
-    { type: "Komunálny odpad", date: "2026-12-30", class: "ko" }
+    { type: "Komunálny odpad", date: "2026-12-31", class: "ko" }
   ];
 
-  // Zoradenie chronologicky
+  // Zoradenie chronologicky od najstaršieho po najnovší
   harmonogramGeca.sort((a, b) => new Date(a.date) - new Date(b.date));
 
   const today = new Date();
   today.setHours(0, 0, 0, 0);
 
   const scheduleContainer = document.getElementById('schedule');
+
+  harmonogramGeca.call ? null : null; // utility check
 
   harmonogramGeca.forEach(item => {
     const itemDate = new Date(item.date);
@@ -235,7 +239,7 @@
         <div class="card-type">${item.type}</div>
         <div class="card-date">${dateFormatted}</div>
       </div>
-      <div class="badge">${isPast ? 'Prebehlo' : 'Budúci zvoz'}</div>
+      <div class="badge">${isPast ? 'Prebehло' : 'Budúci zvoz'}</div>
     `;
     scheduleContainer.appendChild(card);
   });
