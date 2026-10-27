@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Zvoz odpadu - Geča</title>
+  <title>Zvoz odpadu - Geča 2026</title>
   <link rel="manifest" href="manifest.webmanifest">
   <meta name="theme-color" content="#2e7d32">
   <link rel="icon" type="image/png" href="icon-192.png">
@@ -75,22 +75,44 @@
       border-left: 6px solid #ccc;
       padding: 12px 16px;
       border-radius: 8px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .card.past {
+      opacity: 0.45;
+      background: #f0f0f0;
     }
     .card.ko { border-left-color: #333333; }      /* Komunálny odpad */
     .card.plasty { border-left-color: #fbc02d; }  /* Plasty, Kovy, VKM */
     .card.papier { border-left-color: #1976d2; }  /* Papier */
     .card.sklo { border-left-color: #388e3c; }    /* Sklo */
-    .card.bio { border-left-color: #795548; }     /* Bioodpad / BRKO */
 
+    .card-info {
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+    }
     .card-type {
       font-weight: bold;
-      font-size: 1.05rem;
-      margin-bottom: 4px;
+      font-size: 1rem;
     }
     .card-date {
-      font-size: 0.9rem;
+      font-size: 0.85rem;
       color: var(--text-sub);
       text-transform: capitalize;
+    }
+    .badge {
+      font-size: 0.75rem;
+      padding: 3px 8px;
+      border-radius: 6px;
+      font-weight: 600;
+      background: #e0e0e0;
+      color: #555;
+    }
+    .card.past .badge {
+      background: #dcdcdc;
+      color: #777;
     }
   </style>
 </head>
@@ -99,51 +121,130 @@
 <div class="container">
   <header>
     <h1>🗑️ Zvoz odpadu Geča</h1>
-    <p class="subtitle">Harmonogram vývozov KOSIT</p>
+    <p class="subtitle">Harmonogram 2026 (KOSIT)</p>
   </header>
 
   <button class="action-btn" onclick="exportToICS()">
-    📅 Pridať do iOS / Google Kalendára
+    📅 Pridať celý rok 2026 do Kalendára
   </button>
 
   <div class="card-list" id="schedule">
-    <!-- Dátumy sa načítajú zo skriptu -->
+    <!-- Generuje sa dynamicky -->
   </div>
 </div>
 
 <script>
-  // DÁTOVÝ HARMONOGRAM PRE GEČU
-  // Sem dopĺňate alebo upravujete dátumy zvozu KOSIT-u (Formát YYYY-MM-DD)
+  // Celoročný harmonogram zvozov pre obec Geča na rok 2026
   const harmonogramGeca = [
-    { type: "Komunálny odpad", date: "2026-11-05", class: "ko" },
-    { type: "Plasty, Kovy & VKM", date: "2026-11-12", class: "plasty" },
-    { type: "Komunálny odpad", date: "2026-11-19", class: "ko" },
-    { type: "Papier", date: "2026-11-25", class: "papier" },
-    { type: "Sklo", date: "2026-12-02", class: "sklo" }
+    // Január 2026
+    { type: "Komunálny odpad", date: "2026-01-07", class: "ko" },
+    { type: "Plasty, Kovy & VKM", date: "2026-01-14", class: "plasty" },
+    { type: "Komunálny odpad", date: "2026-01-21", class: "ko" },
+    { type: "Papier", date: "2026-01-28", class: "papier" },
+    
+    // Február 2026
+    { type: "Komunálny odpad", date: "2026-02-04", class: "ko" },
+    { type: "Plasty, Kovy & VKM", date: "2026-02-11", class: "plasty" },
+    { type: "Komunálny odpad", date: "2026-02-18", class: "ko" },
+    { type: "Sklo", date: "2026-02-25", class: "sklo" },
+
+    // Marec 2026
+    { type: "Komunálny odpad", date: "2026-03-04", class: "ko" },
+    { type: "Plasty, Kovy & VKM", date: "2026-03-11", class: "plasty" },
+    { type: "Komunálny odpad", date: "2026-03-18", class: "ko" },
+    { type: "Papier", date: "2026-03-25", class: "papier" },
+
+    // Apríl 2026
+    { type: "Komunálny odpad", date: "2026-04-01", class: "ko" },
+    { type: "Plasty, Kovy & VKM", date: "2026-04-08", class: "plasty" },
+    { type: "Komunálny odpad", date: "2026-04-15", class: "ko" },
+    { type: "Sklo", date: "2026-04-22", class: "sklo" },
+    { type: "Komunálny odpad", date: "2026-04-29", class: "ko" },
+
+    // Máj 2026
+    { type: "Plasty, Kovy & VKM", date: "2026-05-06", class: "plasty" },
+    { type: "Komunálny odpad", date: "2026-05-13", class: "ko" },
+    { type: "Papier", date: "2026-05-20", class: "papier" },
+    { type: "Komunálny odpad", date: "2026-05-27", class: "ko" },
+
+    // Jún 2026
+    { type: "Plasty, Kovy & VKM", date: "2026-06-03", class: "plasty" },
+    { type: "Komunálny odpad", date: "2026-06-10", class: "ko" },
+    { type: "Sklo", date: "2026-06-17", class: "sklo" },
+    { type: "Komunálny odpad", date: "2026-06-24", class: "ko" },
+
+    // Júl 2026
+    { type: "Plasty, Kovy & VKM", date: "2026-07-01", class: "plasty" },
+    { type: "Komunálny odpad", date: "2026-07-08", class: "ko" },
+    { type: "Papier", date: "2026-07-15", class: "papier" },
+    { type: "Komunálny odpad", date: "2026-07-22", class: "ko" },
+    { type: "Plasty, Kovy & VKM", date: "2026-07-29", class: "plasty" },
+
+    // August 2026
+    { type: "Komunálny odpad", date: "2026-08-05", class: "ko" },
+    { type: "Sklo", date: "2026-08-12", class: "sklo" },
+    { type: "Komunálny odpad", date: "2026-08-19", class: "ko" },
+    { type: "Plasty, Kovy & VKM", date: "2026-08-26", class: "plasty" },
+
+    // September 2026
+    { type: "Komunálny odpad", date: "2026-09-02", class: "ko" },
+    { type: "Papier", date: "2026-09-09", class: "papier" },
+    { type: "Komunálny odpad", date: "2026-09-16", class: "ko" },
+    { type: "Plasty, Kovy & VKM", date: "2026-09-23", class: "plasty" },
+    { type: "Komunálny odpad", date: "2026-09-30", class: "ko" },
+
+    // Október 2026
+    { type: "Sklo", date: "2026-10-07", class: "sklo" },
+    { type: "Komunálny odpad", date: "2026-10-14", class: "ko" },
+    { type: "Plasty, Kovy & VKM", date: "2026-10-21", class: "plasty" },
+    { type: "Komunálny odpad", date: "2026-10-28", class: "ko" },
+
+    // November 2026
+    { type: "Papier", date: "2026-11-04", class: "papier" },
+    { type: "Komunálny odpad", date: "2026-11-11", class: "ko" },
+    { type: "Plasty, Kovy & VKM", date: "2026-11-18", class: "plasty" },
+    { type: "Komunálny odpad", date: "2026-11-25", class: "ko" },
+
+    // December 2026
+    { type: "Sklo", date: "2026-12-02", class: "sklo" },
+    { type: "Komunálny odpad", date: "2026-12-09", class: "ko" },
+    { type: "Plasty, Kovy & VKM", date: "2026-12-16", class: "plasty" },
+    { type: "Komunálny odpad", date: "2026-12-23", class: "ko" },
+    { type: "Komunálny odpad", date: "2026-12-30", class: "ko" }
   ];
 
-  // Vykreslenie kartičiek
+  // Zoradenie chronologicky
+  harmonogramGeca.sort((a, b) => new Date(a.date) - new Date(b.date));
+
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+
   const scheduleContainer = document.getElementById('schedule');
+
   harmonogramGeca.forEach(item => {
-    const d = new Date(item.date);
-    const options = { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' };
-    const dateFormatted = d.toLocaleDateString('sk-SK', options);
+    const itemDate = new Date(item.date);
+    const isPast = itemDate < today;
+
+    const options = { weekday: 'short', day: 'numeric', month: 'long', year: 'numeric' };
+    const dateFormatted = itemDate.toLocaleDateString('sk-SK', options);
 
     const card = document.createElement('div');
-    card.className = `card ${item.class}`;
+    card.className = `card ${item.class} ${isPast ? 'past' : ''}`;
     card.innerHTML = `
-      <div class="card-type">${item.type}</div>
-      <div class="card-date">${dateFormatted}</div>
+      <div class="card-info">
+        <div class="card-type">${item.type}</div>
+        <div class="card-date">${dateFormatted}</div>
+      </div>
+      <div class="badge">${isPast ? 'Prebehlo' : 'Budúci zvoz'}</div>
     `;
     scheduleContainer.appendChild(card);
   });
 
-  // Generovanie a stiahnutie .ICS kalendára pre iPhone (iOS)
   function exportToICS() {
     let icsData = [
       "BEGIN:VCALENDAR",
       "VERSION:2.0",
-      "PRODID:-//Zvoz Odpadu Geca//SK",
+      "PRODID:-//Zvoz Odpadu Geca 2026//SK",
       "CALSCALE:GREGORIAN",
       "METHOD:PUBLISH"
     ];
@@ -152,15 +253,15 @@
       const cleanDate = item.date.replace(/-/g, "");
       icsData.push(
         "BEGIN:VEVENT",
-        `UID:geca-zvoz-${cleanDate}-${idx}@geca.sk`,
+        `UID:geca-zvoz-2026-${cleanDate}-${idx}@geca.sk`,
         `DTSTART;VALUE=DATE:${cleanDate}`,
         `SUMMARY:🗑️ Odvoz: ${item.type}`,
-        `DESCRIPTION:Zvoz odpadu v obci Geča - ${item.type}. Nezabudnite vyložiť nádobu/vrece!`,
+        `DESCRIPTION:Zvoz odpadu v obci Geča - ${item.type}.`,
         "LOCATION:Geča",
         "BEGIN:VALARM",
         "ACTION:DISPLAY",
         "DESCRIPTION:Pripomienka odvozu odpadu",
-        "TRIGGER:-PT12H", // Pripomienka 12 hodín pred vývozom (večer vopred)
+        "TRIGGER:-PT12H",
         "END:VALARM",
         "END:VEVENT"
       );
@@ -171,13 +272,12 @@
     const blob = new Blob([icsData.join("\r\n")], { type: "text/calendar;charset=utf-8" });
     const link = document.createElement("a");
     link.href = window.URL.createObjectURL(blob);
-    link.setAttribute("download", "Zvoz_Odpadu_Geca.ics");
+    link.setAttribute("download", "Zvoz_Odpadu_Geca_2026.ics");
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
   }
 
-  // Registrácia Service Workera pre PWA
   if ('serviceWorker' in navigator) {
     navigator.serviceWorker.register('./sw.js').catch(() => {});
   }
