@@ -193,8 +193,7 @@
 
     icsData.push("END:VCALENDAR");
 
-    const blob = new Blob([icsData.join("
-")], { type: "text/calendar;charset=utf-8" });
+    const blob = new Blob([icsData.join("\r\n")], { type: "text/calendar;charset=utf-8" });
     const link = document.createElement("a");
     link.href = window.URL.createObjectURL(blob);
     link.setAttribute("download", "Zvoz_Odpadu_Geca_2026.ics");
